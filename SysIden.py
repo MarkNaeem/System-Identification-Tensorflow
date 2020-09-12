@@ -35,7 +35,7 @@ class SysIden():
     self.cost = tf.reduce_mean(tf.losses.mean_squared_error(self.y, y_))
     self.optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(self.cost)
    
-  def set_learning_rate(self,lrarning_rate):
+  def set_learning_rate(self,learning_rate):
     """sets the learning rate of the adam optimizer
        Parameters:
        -----------
