@@ -7,6 +7,13 @@ tf.disable_v2_behavior()
 
 class SysIden():
   def __init__(self,input_size,output_size,dt,learning_rate=5e-2):
+    """The class initializer.
+       Parameters:
+       -----------
+       input size:    int, how many inputs does the system have. 
+       output size:   int, how many outputs does the system have. 
+       learning rate: learnin rate for adam optimizer"""
+
     self.output_size = output_size
     self.input_size  = input_size
     self.dt_c = tf.constant(dt)
@@ -29,12 +36,26 @@ class SysIden():
     self.optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(self.cost)
    
   def set_learning_rate(self,lrarning_rate):
+    """sets the learning rate of the adam optimizer
+       Parameters:
+       -----------
+       learning_rate: int, learning_rate to be set for adam optimizer 
+    """
     self.optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(self.cost)
     
 
-  def optimize(self,Y,U,iters=500,verbose=50):
-    assert Y.shape[0] == self.output_size , "Training data output must be in size (output_shape,-1)"
-    assert U.shape[0] == self.input_size  , "Training data  input must be in size  (input_shape,-1)"
+  def optimize(self,Y,U,iters=500,verbose=50,plot=True):
+    """takes the training data to optimize the system matrices. KeyboardInterrupt can end the optimization.
+       Parameters:
+       -----------
+       Y:       np.ndarray, system output recorded data, should be in shape (output_size, #samples).
+       U:       np.ndarray, system  input recorded data, should be in shape (output_size, #samples).
+       iters:   int, iterations for the optimizer.
+       verbose: int, how often to print the cost value and time taken, -1 to disable printing.
+       plot:    bool, plot cost values vs iterations at the end of iterations.
+    """
+    assert Y.shape[0] == self.output_size , "Training data output must be in size (output_size,-1)"
+    assert U.shape[0] == self.input_size  , "Training data  input must be in size  (input_size,-1)"
     
     Y0 = Y[:,:-1]
     Y1 = Y[:,1:]
@@ -56,12 +77,14 @@ class SysIden():
 
     except KeyboardInterrupt: pass            
     print("\nTraining complete!"," took: ",datetime.datetime.now() - anow)
-    plt.plot(costs)
-    plt.xlabel("Iterations")
-    plt.ylabel("Cost")
-    plt.grid(1)
-    plt.show()
+    if plot:
+      plt.plot(costs)
+      plt.xlabel("Iterations")
+      plt.ylabel("Cost")
+      plt.grid(1)
+      plt.show()
 
 
   def get_matrices(self):
+    """returns the values of the A, B matrices"""
     return self.sess.run(self.Av), self.sess.run(self.Bv)
