@@ -1,5 +1,5 @@
 # system-Identification-Tensorflow
-The Python code for "[Linear Time Invariant State Space System Identification Using Adam Optimization](https://ieeexplore.ieee.org/document/9047808/)" with some examples on how to use it.
+The Python code for "[Linear Time Invariant State Space System Identification Using Adam Optimization](https://ieeexplore.ieee.org/document/9047808/)" paper with some examples on how to use it.
 
 
 ### There is two python files in this repository:
